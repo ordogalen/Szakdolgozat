@@ -1,0 +1,7 @@
+*.pyc
+.DS_store
+best_check_point*
+
+.idea
+meta
+save_model
