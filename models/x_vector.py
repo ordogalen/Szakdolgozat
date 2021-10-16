@@ -26,6 +26,7 @@ class X_vector(nn.Module):
         self.segment7 = nn.Linear(512, 512)
         self.output = nn.Linear(512, num_classes)
         self.softmax = nn.Softmax(dim=1)
+
     def forward(self, inputs):
         tdnn1_out = self.tdnn1(inputs)
         return tdnn1_out
