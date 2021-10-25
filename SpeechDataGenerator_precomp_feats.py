@@ -25,7 +25,7 @@ class SpeechDataGenerator_precomp_features():
         return len(self.npy_files)
 
     def __getitem__(self, idx):
-        npy_filepath =self.npy_files[idx]
+        npy_filepath = self.npy_files[idx]
         class_id = self.labels[idx]
         #lang_label=lang_id[self.audio_links[idx].split('/')[-2]]
         spec = utils.load_npy_data(npy_filepath,mode=self.mode)

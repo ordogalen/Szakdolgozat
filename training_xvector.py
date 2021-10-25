@@ -16,9 +16,16 @@ import argparse
 from models.x_vector_Indian_LID import X_vector
 from sklearn.metrics import accuracy_score
 from utils.utils import speech_collate
-import torch.nn.functional as F
+import matplotlib.pyplot as plt
+#import torch.nn.functional as F
 
 torch.multiprocessing.set_sharing_strategy('file_system')
+def showTensor(aTensor):
+    plt.figure()
+    plt.imshow(aTensor.numpy())
+    plt.colorbar()
+    plt.show()
+
 
 ########## Argument parser
 parser = argparse.ArgumentParser(add_help=False)
@@ -43,6 +50,10 @@ train_size = int(0.8 * len(dataset))
 test_size = len(dataset) - train_size
 train_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size, test_size])
 
+print("All data:"+str(len(dataset)))
+print("Training on "+str(len(train_dataset)))
+print("Validating on "+str(len(test_dataset)))
+
 dataset_train = SpeechDataGenerator(dataset_audio_path=args.training_filepath, mode='train', shuffle_seed=SHUFFLE_SEED)
 dataloader_train = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, collate_fn=speech_collate)
 
@@ -60,12 +71,15 @@ model = X_vector(args.input_dim, args.num_classes).to(device)
 optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=0.0, betas=(0.9, 0.98), eps=1e-9)
 loss_fun = nn.CrossEntropyLoss()
 
+if not os.path.exists("meta/FeatureExt"):
+    os.makedirs("meta/FeatureExt")
 
 def train(dataloader_train, epoch):
     train_loss_list = []
     full_preds = []
     full_gts = []
     model.train()
+    x_vec = 0
     for i_batch, sample_batched in enumerate(dataloader_train):
         features = torch.from_numpy(np.asarray([torch_tensor.numpy().T for torch_tensor in sample_batched[0]])).float()
         labels = torch.from_numpy(np.asarray([torch_tensor[0].numpy() for torch_tensor in sample_batched[1]]))
@@ -73,6 +87,7 @@ def train(dataloader_train, epoch):
         features.requires_grad = True
         optimizer.zero_grad()
         pred_logits, x_vec = model(features)
+
         #### CE loss
         loss = loss_fun(pred_logits, labels.long())
         loss.backward()
@@ -88,6 +103,7 @@ def train(dataloader_train, epoch):
         for lab in labels.detach().cpu().numpy():
             full_gts.append(lab)
 
+    print(x_vec)
     mean_acc = accuracy_score(full_gts, full_preds)
     mean_loss = np.mean(np.asarray(train_loss_list))
     print('Total training loss {} and training Accuracy {} after {} epochs'.format(mean_loss, mean_acc, epoch))
@@ -100,11 +116,14 @@ def validation(dataloader_val, epoch):
         full_preds = []
         full_gts = []
         for i_batch, sample_batched in enumerate(dataloader_val):
+
             features = torch.from_numpy(
                 np.asarray([torch_tensor.numpy().T for torch_tensor in sample_batched[0]])).float()
             labels = torch.from_numpy(np.asarray([torch_tensor[0].numpy() for torch_tensor in sample_batched[1]]))
             features, labels = features.to(device), labels.to(device)
             pred_logits, x_vec = model(features)
+
+
             #### CE loss
             loss = loss_fun(pred_logits, labels.long())
             val_loss_list.append(loss.item())
@@ -119,7 +138,6 @@ def validation(dataloader_val, epoch):
         mean_acc = accuracy_score(full_gts, full_preds)
         mean_loss = np.mean(np.asarray(val_loss_list))
         print('Total validation loss {} and Validation accuracy {} after {} epochs'.format(mean_loss, mean_acc, epoch))
-
         model_save_path = os.path.join('save_model', 'best_check_point_' + str(epoch) + '_' + str(mean_loss))
         state_dict = {'model': model.state_dict(), 'optimizer': optimizer.state_dict(), 'epoch': epoch}
         torch.save(state_dict, model_save_path)
@@ -129,3 +147,4 @@ if __name__ == '__main__':
     for epoch in range(args.num_epochs):
         train(dataloader_train, epoch)
         validation(dataloader_val, epoch)
+

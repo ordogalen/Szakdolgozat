@@ -1,5 +1,9 @@
 pytorch
-numpy
+numpy==1.21.3
 glob
-sklearn
-librosa
+sklearn~=0.0
+librosa~=0.8.1
+
+torchvision~=0.10.1
+matplotlib~=3.4.3
+scikit-learn~=1.0

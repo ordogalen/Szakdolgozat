@@ -39,5 +39,6 @@ class X_vector(nn.Module):
         stat_pooling = torch.cat((mean,std),1)
         segment6_out = self.segment6(stat_pooling)
         x_vec = self.segment7(segment6_out)
+        print(x_vec.size())
         predictions = self.output(x_vec)
         return predictions,x_vec
