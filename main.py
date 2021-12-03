@@ -39,18 +39,11 @@ def get_vector(path):
 
     features = ""
     for i_batch, sample_batched in enumerate(dataloader_train):
-        for i in sample_batched[0]:
-            print("asd")
-            print(i)
-
-        print("asd2")
         features = torch.from_numpy(np.asarray([torch_tensor.numpy().T for torch_tensor in sample_batched[0]]))
+
     model(features.to(device))
     h.remove()
     return my_embedding
-
-a = get_vector(path = "./meta/Feature1")
-print(a)
 
 
 def get_vector2(path):
@@ -69,5 +62,6 @@ def get_vector2(path):
     h.remove()
     return my_embedding
 
-a = get_vector2(path = "./meta/Feature1/001/bea001f001_0002_001.wav")
-print(a)
+
+data = np.load('./meta/aibo/train/A/Ohm_01_031_00_A.npy')
+print(data)

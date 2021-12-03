@@ -4,11 +4,9 @@ from torch.utils.data import DataLoader
 import os
 import numpy as np
 
-from SpeechDataGenerator import SpeechDataGenerator2
 import torch
 from models.x_vector_Indian_LID import X_vector
 from utils import utils
-from utils.utils import speech_collate
 
 PATH = "./save_model/best_check_point_15_0.3372245247165362"
 
@@ -24,8 +22,7 @@ layer = model.modules.get('segment6')
 
 def get_vector(raw_wav):
     spec = utils.load_data(raw_wav, mode="train")
-    sample = {'features': torch.from_numpy(np.ascontiguousarray(spec)),
-              'labels': torch.from_numpy(np.ascontiguousarray(0))}
+    sample = {'features': torch.from_numpy(np.ascontiguousarray(spec)),}
 
     model.eval()
     my_embedding = torch.zeros(1,512)
@@ -38,8 +35,39 @@ def get_vector(raw_wav):
     h.remove()
     return my_embedding
 
+wav_aibo = "./meta/aibo/wav-aibo/"
 
-a = get_vector(raw_wav="./meta/Feature1/001/bea001f001_0002_001.wav")
-print(a)
+def extract_features_into_file(raw, label, mode):
+    filesDone = 0
+    files = open(raw, "r")
+    labels = open(label, "r")
+    dir = ""
+    if (mode == 'train'):
+        dir = "./meta/aibo/train/"
+    if(mode == "dev"):
+        dir = "./meta/aibo/dev/"
+    if(mode == "test"):
+        dir = "./meta/aibo/test/"
+    for i, (key1, key2) in enumerate(zip(files, labels)):
+        feature = get_vector(wav_aibo+key1.strip()+".wav")
+        dirWithLabel = dir+key2.strip()
+
+        if not os.path.exists(dirWithLabel):
+            os.makedirs(dirWithLabel)
+        dest_filepath = dirWithLabel + '/'
+        np.save(dest_filepath+key1.strip()+"_"+key2.strip(), feature)
+        filesDone+=1
+        print(filesDone)
+
+    files.close()
+    labels.close()
+
+
+extract_features_into_file("./meta/aibo/filelist.raw.test.txt","./meta/aibo/labels.test.txt","test")
+extract_features_into_file("./meta/aibo/filelist.raw.dev.txt","./meta/aibo/labels.dev.txt","dev")
+
+
+
+
 
 
