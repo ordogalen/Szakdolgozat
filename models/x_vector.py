@@ -11,7 +11,6 @@ Created on Sat May 30 19:59:45 2020
 import torch.nn as nn
 from models.tdnn import TDNN
 import torch
-import torch.nn.functional as F
 
 class X_vector(nn.Module):
     def __init__(self, input_dim = 120, num_classes=8):

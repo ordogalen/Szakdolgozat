@@ -50,12 +50,6 @@ def extract_files(folder_path):
             to_write = audio_filepath + ' ' + str(speaker_id)
             train_lists.append(to_write)
 
-   #for i in range(train_nums, train_nums + int(len(all_lang_folders)*0.2)):
-   #    speaker_id = all_lang_folders[i].split('\\')[1]
-   #    all_files = sorted(glob.glob(all_lang_folders[i]+'\*'))
-   #    for audio_filepath in all_files:
-   #        to_write = audio_filepath + ' ' + str(speaker_id)
-   #        val_lists.append(to_write)
 
     for i in range(train_nums, train_nums + int(len(all_lang_folders)*0.2)):
         speaker_id = all_lang_folders[i].split('\\')[1]
@@ -66,22 +60,16 @@ def extract_files(folder_path):
 
     return train_lists, test_lists, val_lists
 
-
 if __name__ == '__main__':
+
+    pass
     #parser = argparse.ArgumentParser("Configuration for data preparation")
-    #parser.add_argument("--processed_data", default="/media/newhd/youtube_lid_data/download_data", type=str,
+    #parser.add_argument("--processed_data", default="meta/speakers", type=str,
     #                    help='Dataset path')
-    #parser.add_argument("--meta_store_path", default="meta/", type=str, help='Save directory after processing')
+    #parser.add_argument("--meta_store_path", default="meta", type=str, help='Save directory after processing')
     #config = parser.parse_args()
     #train_list, test_list, val_lists = extract_files(config.processed_data)
-
-    parser = argparse.ArgumentParser("Configuration for data preparation")
-    parser.add_argument("--processed_data", default="meta/speakers", type=str,
-                        help='Dataset path')
-    parser.add_argument("--meta_store_path", default="meta", type=str, help='Save directory after processing')
-    config = parser.parse_args()
-    train_list, test_list, val_lists = extract_files(config.processed_data)
-    create_meta(train_list, config.meta_store_path, mode='train')
-    create_meta(test_list, config.meta_store_path, mode='test')
-    create_meta(val_lists, config.meta_store_path, mode='validation')
+    #create_meta(train_list, config.meta_store_path, mode='train')
+    #create_meta(test_list, config.meta_store_path, mode='test')
+    #create_meta(val_lists, config.meta_store_path, mode='validation')
 
