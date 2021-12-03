@@ -1,23 +1,15 @@
-from collections import OrderedDict
 
-from torch import optim
-from torch.utils.checkpoint import checkpoint
 from torch.utils.data import DataLoader
 import os
 import numpy as np
-from pathlib import Path
-import torch
-import torch.nn as nn
-import torchvision.models as models
-import torchvision.transforms as transforms
-from torchaudio.kaldi_io import read_mat_scp
+
 
 from SpeechDataGenerator import SpeechDataGenerator
 from utils import utils
 import torch
-import torchvision
+
 from models.x_vector_Indian_LID import X_vector
-import feature_extraction
+
 from utils.utils import speech_collate
 
 PATH = "./save_model/best_check_point_15_0.3372245247165362"
