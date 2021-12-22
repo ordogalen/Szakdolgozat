@@ -1,6 +1,5 @@
 pytorch
 numpy==1.21.3
-glob
 sklearn~=0.0
 librosa~=0.8.1
 
