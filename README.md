@@ -14,3 +14,32 @@ owner: https://github.com/KrishnaDN/x-vector-pytorch#installation
 
 # Ami hátra van
 1. SVM megnézése betanitása
+2. # FONTOS LENNE FELRAKNI A META MAPPÁT VALAHOVA
+https://www.datacamp.com/community/tutorials/svm-classification-scikit-learn-python#building
+
+
+
+5 cím
+-> x-vector
+-> svm
+-> downsampling aibora
+uar
+
+svm  -> standardscaler -> 
+svm fit csak tanitó többi 
+10^-5 10 complexity
+svm -> posterior/prob
+kernel: rbf -> paramétere: complexity + gamma
+
+amelyik deven a legjobb -> teszt
+
+Eddig van betanított x-vector 90% körüli a sima bea-son
+TEHÁT megvannak a feature extractok minden hangra külön label mappákba.
+Pontosan ez a downsampling mire jó?
+SVM-nél standardscaler kell és csak tanitóra kell a fit.
+Többire mit pontosan?
+Hogy kellene beadni neki a labeleket kezdek elveszni.
+Hogy kellene ezt az svm-et tanitani pontosan.
+
+https://analyticsindiamag.com/understanding-the-basics-of-svm-with-example-and-python-implementation/
+https://torchbearer.readthedocs.io/en/0.1.7/examples/svm_linear.html

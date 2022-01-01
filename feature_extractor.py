@@ -43,7 +43,7 @@ def extract_features_into_file(raw, label, mode):
     labels = open(label, "r")
     dir = ""
     if (mode == 'train'):
-        dir = "./meta/aibo/train/"
+        dir = "./meta/aibo/train_downsample/"
     if(mode == "dev"):
         dir = "./meta/aibo/dev/"
     if(mode == "test"):
@@ -63,9 +63,10 @@ def extract_features_into_file(raw, label, mode):
     labels.close()
 
 
-extract_features_into_file("./meta/aibo/filelist.raw.test.txt","./meta/aibo/labels.test.txt","test")
+extract_features_into_file("./meta/aibo/filelist.raw.test.txt","./meta/aibo/labels.train.txt","test")
 extract_features_into_file("./meta/aibo/filelist.raw.dev.txt","./meta/aibo/labels.dev.txt","dev")
 
+extract_features_into_file("./meta/aibo/filelist.raw.train.downsample.txt","./meta/aibo/labels.train.downsample.txt","train")
 
 
 
