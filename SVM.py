@@ -42,28 +42,50 @@ def load_aibo_data(filepath):
 
 
 dev = load_aibo_data('./meta/aibo/dev')
-train = load_aibo_data('./meta/aibo/train')
+train = load_aibo_data('./meta/aibo/train_downsample')
+test = load_aibo_data('./meta/aibo/test')
 
 
 X_dev = dev.data
 y_dev = dev.target
 X_train = train.data
 y_train = train.target
-# TODO testet is lehúzni
+# TODO testet is lehúzni done
+X_test = test.data
+y_test = test.target
+
 
 # TODO megkell csinálni hogy a legjobb deven értékeljem ki a tesztet aztán annyi for loop
-rbf_svc = svm.SVC(kernel='rbf', max_iter=1000)
-clf = make_pipeline(StandardScaler(), rbf_svc)
-clf.fit(X_train, y_train)
-y_pred = clf.predict(X_dev)
 
-print("Accuracy:", metrics.accuracy_score(y_dev, y_pred))
+def train():
+    best_svm = 0
+    best_acc = 0
+    for i in range(500):
+        rbf_svc = svm.SVC(kernel='rbf', max_iter=i)
+        clf = make_pipeline(StandardScaler(), rbf_svc)
+        clf.fit(X_train, y_train)
+        y_pred = clf.predict(X_dev)
+        acc = metrics.accuracy_score(y_dev, y_pred)
+        print(str(i) + ". iteration")
+        print("accuracy: " + str(acc))
+        if acc > best_acc:
+            best_svm = clf
+            best_acc = acc
 
-print("Precision:", metrics.precision_score(y_dev, y_pred, average='weighted'))
+    return best_svm
+
+
+asd = train()
+
+y_pred = asd.predict(X_test)
+
+print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
+
+print("Precision:", metrics.precision_score(y_test, y_pred, average='weighted'))
 
 # Model Recall: what percentage of positive tuples are labelled as such?
-print("Recall:", metrics.recall_score(y_dev, y_pred, average='weighted'))
+print("Recall:", metrics.recall_score(y_test, y_pred, average='weighted'))
 
-print("Matrix:", metrics.confusion_matrix(y_dev, y_pred))
+print("Matrix:", metrics.confusion_matrix(y_test, y_pred))
 
-print("Matrix:", metrics.confusion_matrix(y_dev, y_pred).ravel())
+print("Matrix:", metrics.confusion_matrix(y_test, y_pred).ravel())
