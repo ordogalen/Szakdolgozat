@@ -1,15 +1,19 @@
 
 from sklearn import svm, metrics
+from sklearn.utils import shuffle
 import os
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.utils import Bunch
 import numpy as np
-from sklearn.metrics import accuracy_score
-
 
 
 def load_aibo_data(filepath):
+    """
+    Make training dev and test Bunch
+    :param filepath: The filepath for the .npy files
+    :return: a shuffled Bunch with the labeled .npy files
+    """
     dev_data = Bunch()
     dev_data["target_names"] = ["A", "E", "N", "P", "R"]
     dev_data["target"] = []
@@ -25,17 +29,19 @@ def load_aibo_data(filepath):
                 b = np.concatenate((b, data))
 
             if dir == "A":
-                dev_data["target"] += [0]
-            if dir == "E":
                 dev_data["target"] += [1]
-            if dir == "N":
+            if dir == "E":
                 dev_data["target"] += [2]
-            if dir == "P":
+            if dir == "N":
                 dev_data["target"] += [3]
-            if dir == "R":
+            if dir == "P":
                 dev_data["target"] += [4]
+            if dir == "R":
+                dev_data["target"] += [5]
 
     dev_data["data"] = b
+    shuffle(dev_data, random_state=42)
+
     return dev_data
 
 
@@ -50,18 +56,22 @@ X_dev = dev.data
 y_dev = dev.target
 X_train = train.data
 y_train = train.target
-# TODO testet is lehúzni done
 X_test = test.data
 y_test = test.target
 
 
 # TODO megkell csinálni hogy a legjobb deven értékeljem ki a tesztet aztán annyi for loop
 
+
 def train():
+    """
+    Get the best svm in the training process
+    :return: Returns the best_svm, means that the svm scored the highest in accuracy
+    """
     best_svm = 0
     best_acc = 0
-    for i in range(500):
-        rbf_svc = svm.SVC(kernel='rbf', max_iter=i)
+    for i in range(100):
+        rbf_svc = svm.SVC(kernel='rbf', max_iter=i, C=0.1)
         clf = make_pipeline(StandardScaler(), rbf_svc)
         clf.fit(X_train, y_train)
         y_pred = clf.predict(X_dev)
@@ -75,15 +85,15 @@ def train():
     return best_svm
 
 
-asd = train()
+best = train()
 
-y_pred = asd.predict(X_test)
+y_pred = best.predict(X_test)
 
 print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
 
 print("Precision:", metrics.precision_score(y_test, y_pred, average='weighted'))
 
-# Model Recall: what percentage of positive tuples are labelled as such?
+# Model Recall: what percentage of positive tuples are labelled as such
 print("Recall:", metrics.recall_score(y_test, y_pred, average='weighted'))
 
 print("Matrix:", metrics.confusion_matrix(y_test, y_pred))

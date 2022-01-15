@@ -17,11 +17,10 @@ from models.x_vector_Indian_LID import X_vector
 from sklearn.metrics import accuracy_score
 from utils.utils import speech_collate
 
-# import torch.nn.functional as F
 
 torch.multiprocessing.set_sharing_strategy('file_system')
 
-########## Argument parser
+# Argument parser
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument('-training_filepath', type=str, default='meta/speakers')
 parser.add_argument('-testing_filepath', type=str, default='meta/speakers')
@@ -35,7 +34,7 @@ parser.add_argument('-use_gpu', action="store_true", default=True)
 parser.add_argument('-num_epochs', action="store_true", default=15)
 args = parser.parse_args()
 
-### Data related
+# Data related
 SHUFFLE_SEED = 42  # random seed
 dataset = SpeechDataGenerator(dataset_audio_path=args.training_filepath, mode='train', shuffle_seed=SHUFFLE_SEED)
 
@@ -49,22 +48,21 @@ print("Validating on " + str(len(test_dataset)))
 
 dataset_train = SpeechDataGenerator(dataset_audio_path=args.training_filepath, mode='train', shuffle_seed=SHUFFLE_SEED)
 dataloader_train = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, collate_fn=speech_collate)
+
 dataset_val = SpeechDataGenerator(dataset_audio_path=args.validation_filepath, mode='train', shuffle_seed=SHUFFLE_SEED)
 dataloader_val = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=True, collate_fn=speech_collate)
-
 
 dataset_test = SpeechDataGenerator(dataset_audio_path=args.training_filepath, mode='test', shuffle_seed=SHUFFLE_SEED)
 dataloader_test = DataLoader(dataset_test, batch_size=args.batch_size, shuffle=True, collate_fn=speech_collate)
 
-## Model related
+# Model related
 use_cuda = True  # torch.cuda.is_available()
 device = torch.device("cuda" if use_cuda else "cpu")
 model = X_vector(args.input_dim, args.num_classes).to(device)
 optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=0.0, betas=(0.9, 0.98), eps=1e-9)
 loss_fun = nn.CrossEntropyLoss()
 
-if not os.path.exists("meta/FeatureExt"):
-    os.makedirs("meta/FeatureExt")
+
 
 
 def train(dataloader_train, epoch):
@@ -80,7 +78,7 @@ def train(dataloader_train, epoch):
         optimizer.zero_grad()
         pred_logits, x_vec = model(features)
 
-        #### CE loss
+        # CE loss
         loss = loss_fun(pred_logits, labels.long())
         loss.backward()
         optimizer.step()
@@ -112,10 +110,9 @@ def validation(dataloader_val, epoch):
             features, labels = features.to(device), labels.to(device)
             pred_logits, x_vec = model(features)
 
-            #### CE loss
+            # CE loss
             loss = loss_fun(pred_logits, labels.long())
             val_loss_list.append(loss.item())
-            # train_acc_list.append(accuracy)
             predictions = np.argmax(pred_logits.detach().cpu().numpy(), axis=1)
             for pred in predictions:
                 full_preds.append(pred)
@@ -131,6 +128,9 @@ def validation(dataloader_val, epoch):
 
 
 if __name__ == '__main__':
+    if not os.path.exists("meta/FeatureExt"):
+        os.makedirs("meta/FeatureExt")
+
     for epoch in range(args.num_epochs):
         train(dataloader_train, epoch)
         validation(dataloader_val, epoch)
