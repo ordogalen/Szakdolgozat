@@ -10,7 +10,7 @@ import torch
 from utils import utils
 import os
 from pathlib import Path
-
+import random
 from torch.utils.data import DataLoader, Dataset, random_split
 
 
@@ -55,16 +55,11 @@ class SpeechDataGenerator():
             ]
             self.audio_links += speaker_sample_paths
             self.labels += [label] * len(speaker_sample_paths)
-            rng = np.random.RandomState(shuffle_seed)
-            rng.shuffle(self.audio_links)
-            rng = np.random.RandomState(shuffle_seed)
-            rng.shuffle(self.labels)
 
     def __len__(self):
         return len(self.audio_links)
 
     def __getitem__(self, idx):
-        print("called")
         audio_link = self.audio_links[idx]
         class_id = self.labels[idx]
         spec = utils.load_data(audio_link, mode=self.mode)

@@ -43,3 +43,9 @@ Hogy kellene ezt az svm-et tanitani pontosan.
 
 https://analyticsindiamag.com/understanding-the-basics-of-svm-with-example-and-python-implementation/
 https://torchbearer.readthedocs.io/en/0.1.7/examples/svm_linear.html
+
+#Steps
+1. datasets.py-al lefuttatni a-t, amibe csak az összes hangfájl útját kell megadni
+2. Training training_xvector.py átkell állítani amennyi class van (len(a.py által létrehozott mappák))
+3. A legjobb model alapján feature_extractor.py 
+4. SVM.py lefuttatni és megvannak az értékek

@@ -20,11 +20,11 @@ def FE_pipeline(feature_list, store_loc, mode):
     if not os.path.exists(create_root):
         os.makedirs(create_root)
     if mode == 'train':
-        fid = open('meta/training_feat.txt', 'w')
+        fid = open('meta/bea/training_feat.txt', 'w')
     elif mode == 'test':
-        fid = open('meta/testing_feat.txt', 'w')
+        fid = open('meta/bea/testing_feat.txt', 'w')
     elif mode == 'validation':
-        fid = open('meta/validation_feat.txt', 'w')
+        fid = open('meta/bea/validation_feat.txt', 'w')
     else:
         print('Unknown mode')
 
@@ -46,12 +46,12 @@ def FE_pipeline(feature_list, store_loc, mode):
 
 if __name__ == '__main__':
     store_loc = 'meta/Features'
-    read_train = [line.rstrip('\n') for line in open('meta/training.txt')]
+    read_train = [line.rstrip('\n') for line in open('meta/bea/training.txt')]
     FE_pipeline(read_train, store_loc, mode='train')
 
-    read_test = [line.rstrip('\n') for line in open('meta/testing.txt')]
+    read_test = [line.rstrip('\n') for line in open('meta/bea/testing.txt')]
     FE_pipeline(read_test, store_loc, mode='test')
 
-    read_val = [line.rstrip('\n') for line in open('meta/validation.txt')]
+    read_val = [line.rstrip('\n') for line in open('meta/bea/validation.txt')]
     FE_pipeline(read_val, store_loc, mode='validation')
 

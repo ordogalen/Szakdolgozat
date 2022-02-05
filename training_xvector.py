@@ -22,23 +22,25 @@ torch.multiprocessing.set_sharing_strategy('file_system')
 
 # Argument parser
 parser = argparse.ArgumentParser(add_help=False)
-parser.add_argument('-training_filepath', type=str, default='meta/speakers')
-parser.add_argument('-testing_filepath', type=str, default='meta/speakers')
-parser.add_argument('-validation_filepath', type=str, default='meta/speakers')
+parser.add_argument('-training_filepath', type=str, default='meta/bea/speakers')
+parser.add_argument('-testing_filepath', type=str, default='meta/bea/speakers')
+parser.add_argument('-validation_filepath', type=str, default='meta/bea/speakers')
+
+parser.add_argument('-audio_files', type=str, default='meta/bea/speakers')
 
 parser.add_argument('-input_dim', action="store_true", default=120)
-parser.add_argument('-num_classes', action="store_true", default=15)
+parser.add_argument('-num_classes', action="store_true", default=89)
 parser.add_argument('-lamda_val', action="store_true", default=0.1)
-parser.add_argument('-batch_size', action="store_true", default=32)
+parser.add_argument('-batch_size', action="store_true", default=42)
 parser.add_argument('-use_gpu', action="store_true", default=True)
-parser.add_argument('-num_epochs', action="store_true", default=15)
+parser.add_argument('-num_epochs', action="store_true", default=30)
 args = parser.parse_args()
 
 # Data related
-SHUFFLE_SEED = 42  # random seed
-dataset = SpeechDataGenerator(dataset_audio_path=args.training_filepath, mode='train', shuffle_seed=SHUFFLE_SEED)
+SHUFFLE_SEED = 45  # random seed
+dataset = SpeechDataGenerator(dataset_audio_path=args.audio_files, mode='train', shuffle_seed=SHUFFLE_SEED)
 
-train_size = int(0.86 * len(dataset))
+train_size = int(0.80 * len(dataset))
 test_size = len(dataset) - train_size
 train_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size, test_size])
 
@@ -61,9 +63,6 @@ device = torch.device("cuda" if use_cuda else "cpu")
 model = X_vector(args.input_dim, args.num_classes).to(device)
 optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=0.0, betas=(0.9, 0.98), eps=1e-9)
 loss_fun = nn.CrossEntropyLoss()
-
-
-
 
 def train(dataloader_train, epoch):
     train_loss_list = []
@@ -122,7 +121,7 @@ def validation(dataloader_val, epoch):
         mean_acc = accuracy_score(full_gts, full_preds)
         mean_loss = np.mean(np.asarray(val_loss_list))
         print('Total validation loss {} and Validation accuracy {} after {} epochs'.format(mean_loss, mean_acc, epoch))
-        model_save_path = os.path.join('save_model', 'best_check_point_' + str(epoch) + '_' + str(mean_loss))
+        model_save_path = os.path.join('save_model_2', 'best_check_point_' + str(epoch) + '_' + str(mean_loss))
         state_dict = {'model': model.state_dict(), 'optimizer': optimizer.state_dict(), 'epoch': epoch}
         torch.save(state_dict, model_save_path)
 

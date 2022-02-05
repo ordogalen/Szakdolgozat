@@ -12,8 +12,8 @@ from models.x_vector_Indian_LID import X_vector
 
 from utils.utils import speech_collate
 
-PATH = "./save_model/best_check_point_15_0.3372245247165362"
-
+#PATH = "./save_model/best_check_point_15_0.3372245247165362"
+PATH = "save_model_2/best_check_point_14_1.921928892964902"
 
 
 

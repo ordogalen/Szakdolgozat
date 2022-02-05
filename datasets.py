@@ -6,18 +6,30 @@ Created on Sat May 30 19:09:44 2020
 """
 
 import os
-import numpy as np
 import glob
-import argparse
+import shutil
+
+def a(files_list, mode):
+    wav_files = os.listdir(files_list)
+    for file in wav_files:
+        audio_link = files_list+"/" + file
+        label = file.split("_")[0][7:10]
+        if not os.path.exists("meta/bea/speakers/"+label):
+            os.makedirs("meta/bea/speakers/"+label)
+        shutil.copy(audio_link, "meta/bea/speakers/"+label)
 
 
 def create_meta(files_list, store_loc, mode='train'):
     if not os.path.exists(store_loc):
         os.makedirs(store_loc)
+    print(store_loc)
+    print(files_list)
     if mode == 'train':
+        print("asd")
         meta_store = store_loc + '/training.txt'
         fid = open(meta_store, 'w')
         for filepath in files_list:
+            print(filepath)
             fid.write(filepath + '\n')
         fid.close()
     elif mode == 'test':
@@ -40,7 +52,6 @@ def extract_files(folder_path):
     all_lang_folders = sorted(glob.glob(folder_path + '/*/'))
     train_lists = []
     test_lists = []
-    val_lists = []
     train_nums = int(len(all_lang_folders)*0.8)
 
     for i in range(train_nums):
@@ -58,18 +69,22 @@ def extract_files(folder_path):
             to_write = audio_filepath + ' ' + str(speaker_id)
             test_lists.append(to_write)
 
-    return train_lists, test_lists, val_lists
+    return train_lists, test_lists
 
 if __name__ == '__main__':
-
-    pass
     #parser = argparse.ArgumentParser("Configuration for data preparation")
-    #parser.add_argument("--processed_data", default="meta/speakers", type=str,
+    #parser.add_argument("--processed_data", default="meta/bea/bea_files_2", type=str,
     #                    help='Dataset path')
-    #parser.add_argument("--meta_store_path", default="meta", type=str, help='Save directory after processing')
+    #parser.add_argument("--meta_store_path", default="meta/bea", type=str, help='Save directory after processing')
     #config = parser.parse_args()
     #train_list, test_list, val_lists = extract_files(config.processed_data)
     #create_meta(train_list, config.meta_store_path, mode='train')
     #create_meta(test_list, config.meta_store_path, mode='test')
     #create_meta(val_lists, config.meta_store_path, mode='validation')
-
+    #create_txt_files("meta/bea/bea_files_2","train")
+    #a("meta/bea/bea_files_2","meta/bea")
+    print(os.listdir("meta/bea/speakers"))
+    c = 0
+    for i in os.listdir("meta/bea/speakers"):
+        c += 1
+    print(c)
