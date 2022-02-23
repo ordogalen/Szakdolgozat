@@ -16,7 +16,6 @@ def load_wav(audio_filepath, sr, min_dur_sec=4):
         dummy = np.zeros((1, int(min_dur_sec * sr) - len_file))
         extened_wav = np.concatenate((audio_data, dummy[0]))
     else:
-
         extened_wav = audio_data
     return extened_wav
 
@@ -79,3 +78,6 @@ def speech_collate(batch):
         specs.append(sample['features'])
         targets.append((sample['labels']))
     return specs, targets
+
+
+

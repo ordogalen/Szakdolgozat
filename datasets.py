@@ -8,6 +8,21 @@ Created on Sat May 30 19:09:44 2020
 import os
 import glob
 import shutil
+import random
+
+
+import numpy
+
+
+def unison_shuffled_copies(a, b):
+    temp = list(zip(a, b))
+    random.shuffle(temp)
+    res1, res2 = zip(*temp)
+    return res1, res2
+
+def list_files_into_txt(files_list, txt):
+    with open(file=txt, mode="w") as file:
+        file.write(os.listdir(files_list))
 
 def a(files_list, mode):
     wav_files = os.listdir(files_list)
@@ -82,9 +97,16 @@ if __name__ == '__main__':
     #create_meta(test_list, config.meta_store_path, mode='test')
     #create_meta(val_lists, config.meta_store_path, mode='validation')
     #create_txt_files("meta/bea/bea_files_2","train")
-    #a("meta/bea/bea_files_2","meta/bea")
-    print(os.listdir("meta/bea/speakers"))
-    c = 0
-    for i in os.listdir("meta/bea/speakers"):
-        c += 1
-    print(c)
+    # #a("meta/bea/bea_files_2","meta/bea")
+    # print(os.listdir("meta/bea/speakers"))
+    # c = 0
+    # for i in os.listdir("meta/bea/speakers"):
+    #     c += 1
+    # print(c)
+    a = [1,2,3,4]
+    b = [1,2,3,4]
+    a,b = unison_shuffled_copies(a,b)
+    print(a)
+    print(b)
+
+

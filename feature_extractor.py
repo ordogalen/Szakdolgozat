@@ -1,6 +1,3 @@
-from torch import optim
-from torch.utils.checkpoint import checkpoint
-from torch.utils.data import DataLoader
 import os
 import numpy as np
 
@@ -9,7 +6,7 @@ from models.x_vector_Indian_LID import X_vector
 from utils import utils
 
 #PATH = "./save_model/best_check_point_15_0.3372245247165362"
-PATH = "save_model_2/best_check_point_14_1.921928892964902"
+PATH = "save_model_2/best_check_point_29_1.2584018047819747"
 
 net = X_vector(120, 89)
 

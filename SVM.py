@@ -113,10 +113,6 @@ print("Size of the train label: ", len(y_train))
 print("Size of the test data: ", len(X_test))
 print("Size of the test label: ", len(y_test))
 
-
-# TODO megkell csinálni hogy a legjobb deven értékeljem ki a tesztet aztán annyi for loop
-
-
 def train():
     """
     Get the best svm in the training process
