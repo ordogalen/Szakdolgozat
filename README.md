@@ -1,51 +1,21 @@
-# x-vector using pytorch
-owner: https://github.com/KrishnaDN/x-vector-pytorch#installation
 
-# Beüzelemlés
-1. Felkell telepíteni a requirements.txtből mindent
-2. +conda fontos
-3. https://pytorch.org/get-started/locally/
- - Itt windows conda python CUDA 10.2
- 
-# Mi van kész
-1. X-vector kész
-2. Feature extractor kész
-3. Downsampling nagyjából kész az alapján kellene feature extractolni
+# Speaker recognition using X-Vector feature extraction and SVM for classification 
+This project was made for diploma work.
 
-# Ami hátra van
-1. SVM megnézése betanitása
-2. # FONTOS LENNE FELRAKNI A META MAPPÁT VALAHOVA
-https://www.datacamp.com/community/tutorials/svm-classification-scikit-learn-python#building
+## Requirements
+- Clone repo: `gh repo clone ordogalen/Szakdolgozat`
+- Install CONDA and PyTorch on your device: 
+	- cuda: https://developer.nvidia.com/cuda-downloads?target_os=Windows&target_arch=x86_64
+	- PyTorch: https://pytorch.org/get-started/locally/
+	
+## Running application
+- For training x-vector: (dataset.py)
+	- Run`create_directories` method
+	- Add your path to audio_files argument and start x_vector training
+- Feature extracting: (feature_extractor.py)
+	- After training is done, add your path to the variables and `run extract_features_into_file` method
+	- Add your path-s to variable in SVM.py and run it.
 
-
-
-5 cím
--> x-vector
--> svm
--> downsampling aibora
-uar
-
-svm  -> standardscaler -> 
-svm fit csak tanitó többi 
-10^-5 10 complexity
-svm -> posterior/prob
-kernel: rbf -> paramétere: complexity + gamma
-
-amelyik deven a legjobb -> teszt
-
-Eddig van betanított x-vector 90% körüli a sima bea-son
-TEHÁT megvannak a feature extractok minden hangra külön label mappákba.
-Pontosan ez a downsampling mire jó?
-SVM-nél standardscaler kell és csak tanitóra kell a fit.
-Többire mit pontosan?
-Hogy kellene beadni neki a labeleket kezdek elveszni.
-Hogy kellene ezt az svm-et tanitani pontosan.
-
-https://analyticsindiamag.com/understanding-the-basics-of-svm-with-example-and-python-implementation/
-https://torchbearer.readthedocs.io/en/0.1.7/examples/svm_linear.html
-
-#Steps
-1. datasets.py-al lefuttatni a-t, amibe csak az összes hangfájl útját kell megadni
-2. Training training_xvector.py átkell állítani amennyi class van (len(a.py által létrehozott mappák))
-3. A legjobb model alapján feature_extractor.py 
-4. SVM.py lefuttatni és megvannak az értékek
+#### Reference
+- This project was based on: https://github.com/KrishnaDN/x-vector-pytorch#installation
+- And also on "Spoken Language Recognition using X-vectors" by David Snyder and his partners: https://danielpovey.com/files/2018_odyssey_xvector_lid.pdf
