@@ -86,6 +86,12 @@ def train(complexity, kernel, gamma):
 
 
 def predict(complexity, kernel, gamma):
+    """
+    For these parameters check this site: https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html
+    :param complexity: SVM complexity parameter
+    :param kernel: SVM kernel parameter
+    :param gamma: SVM gamma parameter
+    """
     best = train(complexity, kernel, gamma)
     print(best)
 
@@ -104,10 +110,10 @@ def predict(complexity, kernel, gamma):
 for i in [0.001,0.01,0.1,1.0, 10.0, 100.0]:
     for j in [0.001, 0.01, 0.1, 1.0, 10.0]:
         print("c = "+str(i)+" g = "+str(j))
-        print("LINEAR")
+        print("LINEAR kernel")
         predict(i, "linear",j)
         print("---------------------------")
 
-        print("RBF")
+        print("RBF kernel")
         predict(i,"rbf",j)
         print("--------------------")
