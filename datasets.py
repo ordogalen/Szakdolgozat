@@ -1,37 +1,15 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Sat May 30 19:09:44 2020
-@author: krishna
-"""
-
 import os
 import glob
 import shutil
-import random
 
-
-import numpy
-
-
-def unison_shuffled_copies(a, b):
-    temp = list(zip(a, b))
-    random.shuffle(temp)
-    res1, res2 = zip(*temp)
-    return res1, res2
-
-def list_files_into_txt(files_list, txt):
-    with open(file=txt, mode="w") as file:
-        file.write(os.listdir(files_list))
-
-def a(files_list, mode):
+def create_directories(files_list, mode):
     wav_files = os.listdir(files_list)
     for file in wav_files:
         audio_link = files_list+"/" + file
         label = file.split("_")[0][7:10]
-        if not os.path.exists("meta/bea/speakers/"+label):
-            os.makedirs("meta/bea/speakers/"+label)
-        shutil.copy(audio_link, "meta/bea/speakers/"+label)
+        if not os.path.exists("meta/bea/speakers_2/"+label):
+            os.makedirs("meta/bea/speakers_2/"+label)
+        shutil.copy(audio_link, "meta/bea/speakers_2/"+label)
 
 
 def create_meta(files_list, store_loc, mode='train'):
@@ -97,16 +75,6 @@ if __name__ == '__main__':
     #create_meta(test_list, config.meta_store_path, mode='test')
     #create_meta(val_lists, config.meta_store_path, mode='validation')
     #create_txt_files("meta/bea/bea_files_2","train")
-    # #a("meta/bea/bea_files_2","meta/bea")
-    # print(os.listdir("meta/bea/speakers"))
-    # c = 0
-    # for i in os.listdir("meta/bea/speakers"):
-    #     c += 1
-    # print(c)
-    a = [1,2,3,4]
-    b = [1,2,3,4]
-    a,b = unison_shuffled_copies(a,b)
-    print(a)
-    print(b)
+    create_directories("meta/bea/bea_files_1", "meta/bea")
 
 
