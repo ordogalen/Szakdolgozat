@@ -1,5 +1,5 @@
 
-# Speaker recognition using X-Vector feature extraction and SVM for classification 
+# Emotion recognition using X-Vector feature extraction and SVM for classification 
 This project was made for diploma work.
 
 ## Requirements
