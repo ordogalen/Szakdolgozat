@@ -1,12 +1,17 @@
+"""
+@author: ordogalen
+"""
+
 from sklearn import svm, metrics
 import os
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.utils import Bunch
 import numpy as np
+from sklearn.metrics import ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
 
-
-
+a = set()
 def load_aibo_data(filepath):
     """
     Make training dev and test Bunch
@@ -31,6 +36,7 @@ def load_aibo_data(filepath):
             b = np.concatenate((b, data))
 
         labelName = file.split("#")[1].split(".")[0]
+        a.add(labelName)
         if labelName == "A":
             dev_data["target"] += [0]
         if labelName == "E":
@@ -51,7 +57,7 @@ def load_aibo_data(filepath):
 dev = load_aibo_data('./meta/aibo/dev')
 train = load_aibo_data('./meta/aibo/train_downsample')
 test = load_aibo_data('./meta/aibo/test')
-
+print(a)
 X_dev = dev.data
 y_dev = dev.target
 
@@ -81,7 +87,8 @@ def train(complexity, kernel, gamma):
     y_pred = clf.predict(X_dev)
     acc = metrics.accuracy_score(y_dev, y_pred)
     print("Dev accuracy: " + str(acc * 100))
-
+    print("DEV PARAMETERS: \n"+metrics.classification_report(y_dev, y_pred))
+    print("----")
     return clf
 
 
@@ -93,7 +100,6 @@ def predict(complexity, kernel, gamma):
     :param gamma: SVM gamma parameter
     """
     best = train(complexity, kernel, gamma)
-    print(best)
 
     y_pred = best.predict(X_test)
 
@@ -105,15 +111,42 @@ def predict(complexity, kernel, gamma):
 
     print("Matrix:", metrics.confusion_matrix(y_test, y_pred))
 
+    print("TEST PARAMETERS: \n"+metrics.classification_report(y_test, y_pred))
+
+    class_names = ["A","E","N","P","R"]
+
+    titles_options = [
+        ("Confusion matrix, without normalization", None),
+        ("Normalized confusion matrix", "true"),
+    ]
+    for title, normalize in titles_options:
+        disp = ConfusionMatrixDisplay.from_estimator(
+            best,
+            X_test,
+            y_test,
+            display_labels=class_names,
+            cmap=plt.cm.Blues,
+            normalize=normalize,
+        )
+        disp.ax_.set_title(title)
+
+        print(title)
+        print(disp.confusion_matrix)
+
+    plt.show()
+
+# for i in [0.001,0.01,0.1,1.0]:
+
+print("LINEAR kernel")
+predict(0.01, "linear", 'scale')
+print("---------------------------")
+
+# for i in [0.1,1.0,10.0]:
+#     for j in [0.0001,0.001,0.01,0.1,1.0]:
+# print("c = " + str(i)+" g = "+str(j))
+
+print("RBF kernel")
+predict(1.0,"rbf",0.001)
+print("--------------------")
 
 
-for i in [0.001,0.01,0.1,1.0, 10.0, 100.0]:
-    for j in [0.001, 0.01, 0.1, 1.0, 10.0]:
-        print("c = "+str(i)+" g = "+str(j))
-        print("LINEAR kernel")
-        predict(i, "linear",j)
-        print("---------------------------")
-
-        print("RBF kernel")
-        predict(i,"rbf",j)
-        print("--------------------")

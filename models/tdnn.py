@@ -57,7 +57,7 @@ class TDNN(nn.Module):
         '''
         
         _, _, d = x.shape
-        #assert (d == self.input_dim), 'Input dimension was wrong. Expected ({}), got ({})'.format(self.input_dim, d)
+        assert (d == self.input_dim), 'Input dimension was wrong. Expected ({}), got ({})'.format(self.input_dim, d)
         x = x.unsqueeze(1)
 
         # Unfold input into smaller temporal contexts

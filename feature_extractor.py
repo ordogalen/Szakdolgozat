@@ -5,9 +5,10 @@ import torch
 from models.x_vector_Indian_LID import X_vector
 from utils import utils
 
+# Paths for check points
 # PATH = "./save_model/best_check_point_15_0.3372245247165362"
 PATH = "save_model/best_check_point_55_0.8169845943339169"
-PATH_B = "save_model/best_check_point_32_0.7193116955459118"
+PATH_A = "save_model/best_check_point_32_0.7193116955459118"
 wav_aibo = "./meta/aibo/wav-aibo/"
 
 use_cuda = torch.cuda.is_available()
@@ -73,5 +74,4 @@ def extract_features_into_file(raw, label, mode, spec_mode):
 
 extract_features_into_file("./meta/aibo/filelist.raw.test.txt", "./meta/aibo/labels.test.txt", "test", "test")
 extract_features_into_file("./meta/aibo/filelist.raw.dev.txt", "./meta/aibo/labels.dev.txt", "dev", "train")
-extract_features_into_file("./meta/aibo/filelist.raw.train.downsample.txt", "./meta/aibo/labels.train.downsample.txt",
-                           "train", "train")
+extract_features_into_file("./meta/aibo/filelist.raw.train.downsample.txt", "./meta/aibo/labels.train.downsample.txt", "train", "train")

@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun May 31 11:15:47 2020
-@author: krishna
-"""
-
 import os
 import numpy as np
 from utils import utils
@@ -14,9 +8,10 @@ def extract_features(audio_filepath):
     return features
 
 
-def FE_pipeline(feature_list, store_loc, mode):
+def FE_pipeline(feature_list, store_location, mode):
     global fid
-    create_root = os.path.join(store_loc, mode)
+
+    create_root = os.path.join(store_location, mode)
     if not os.path.exists(create_root):
         os.makedirs(create_root)
     if mode == 'train':
@@ -54,4 +49,3 @@ if __name__ == '__main__':
 
     read_val = [line.rstrip('\n') for line in open('meta/bea/validation.txt')]
     FE_pipeline(read_val, store_loc, mode='validation')
-

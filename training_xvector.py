@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Sat May 30 20:22:26 2020
-
-@author: krishna
-"""
 import torch
 import numpy as np
 from torch.utils.data import DataLoader
@@ -30,9 +23,10 @@ def draw_curve(current_epoch):
         ax1.legend()
     fig.savefig(os.path.join('meta/lossGraphs', 'train.jpg'))
 
+
 torch.multiprocessing.set_sharing_strategy('file_system')
 
-#Plot
+# Plot
 y_loss = {'train': [], 'val': []}  # loss history
 y_acc = {'train': [], 'val': []}
 x_epoch = []
@@ -60,14 +54,14 @@ train_size = int(0.85 * len(dataset))
 test_size = len(dataset) - train_size
 train_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size, test_size])
 
-
 print("All data:" + str(len(dataset)))
 print("Training on " + str(len(train_dataset)))
 print("Validating on " + str(len(test_dataset)))
 
-dataloader_train = DataLoader(train_dataset, batch_size=args.batch_size, collate_fn=speech_collate, pin_memory=False, shuffle=True )
-dataloader_val = DataLoader(test_dataset, batch_size=args.batch_size, collate_fn=speech_collate, pin_memory=False, shuffle=True)
-
+dataloader_train = DataLoader(train_dataset, batch_size=args.batch_size, collate_fn=speech_collate, pin_memory=False,
+                              shuffle=True)
+dataloader_val = DataLoader(test_dataset, batch_size=args.batch_size, collate_fn=speech_collate, pin_memory=False,
+                            shuffle=True)
 
 # Model related
 use_cuda = True  # torch.cuda.is_available()
@@ -75,6 +69,7 @@ device = torch.device("cuda" if use_cuda else "cpu")
 model = X_vector(args.input_dim, args.num_classes).to(device)
 optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=0.0, betas=(0.9, 0.98), eps=1e-9)
 loss_fun = nn.CrossEntropyLoss()
+
 
 def train(dataloader_train, epoch):
     train_loss_list = []
@@ -151,4 +146,3 @@ if __name__ == '__main__':
         train(dataloader_train, epoch)
         validation(dataloader_val, epoch)
         draw_curve(epoch)
-

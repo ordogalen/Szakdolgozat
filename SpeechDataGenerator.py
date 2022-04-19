@@ -3,7 +3,6 @@ import torch
 from utils import utils
 import os
 from pathlib import Path
-import random
 
 
 class SpeechDataGenerator():

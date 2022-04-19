@@ -1,13 +1,7 @@
-# Third Party
 import librosa
 import numpy as np
-import random
 
 
-# ===============================================
-#       code from Arsha for loading data.
-# This code extract features for a give audio file
-# ===============================================
 def load_wav(audio_filepath, sr, min_dur_sec=4):
     audio_data, fs = librosa.load(audio_filepath, sr=16000)
     len_file = len(audio_data)
@@ -44,7 +38,6 @@ def feature_extraction(filepath, sr=16000, min_dur_sec=4, win_length=400, hop_le
 
 def load_data(filepath, sr=16000, min_dur_sec=4, win_length=400, hop_length=160, n_mels=40, spec_len=400, mode='train'):
     audio_data = load_wav(filepath, sr=sr, min_dur_sec=min_dur_sec)
-    # linear_spect = lin_spectogram_from_wav(audio_data, hop_length, win_length, n_mels)
     linear_spect = lin_spectogram_from_wav(audio_data, hop_length, win_length, n_fft=512)
     mag, _ = librosa.magphase(linear_spect)  # magnitude
     mag_T = mag.T
@@ -78,6 +71,3 @@ def speech_collate(batch):
         specs.append(sample['features'])
         targets.append((sample['labels']))
     return specs, targets
-
-
-
