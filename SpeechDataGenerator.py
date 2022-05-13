@@ -12,7 +12,6 @@ class SpeechDataGenerator():
         self.mode = mode
         self.audio_links = []
         self.labels = []
-        self.i = 0
         self.class_name = 0
 
         class_names = os.listdir(dataset_audio_path)

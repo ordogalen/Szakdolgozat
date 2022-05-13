@@ -5,7 +5,6 @@ from SpeechDataGenerator import SpeechDataGenerator
 import torch.nn as nn
 import os
 from torch import optim
-import argparse
 from models.x_vector_Indian_LID import X_vector
 from sklearn.metrics import accuracy_score
 from utils.utils import speech_collate
@@ -35,21 +34,16 @@ fig = plt.figure()
 ax0 = fig.add_subplot(121, title="mean loss")
 ax1 = fig.add_subplot(122, title="mean accuracy")
 
-# Argument parser
-parser = argparse.ArgumentParser(add_help=False)
-parser.add_argument('-audio_files', type=str, default='meta/bea/speakers')
-parser.add_argument('-input_dim', action="store_true", default=257)
-parser.add_argument('-num_classes', action="store_true", default=12)
-parser.add_argument('-lamda_val', action="store_true", default=0.1)
-parser.add_argument('-batch_size', action="store_true", default=64)
-parser.add_argument('-use_gpu', action="store_true", default=True)
-parser.add_argument('-num_epochs', action="store_true", default=60)
-args = parser.parse_args()
+# Arguments
+audio_files = "meta/bea/speakers"
+input_dim = 257
+batch_size = 64
+num_epochs = 60
 
 # Data related
-dataset = SpeechDataGenerator(dataset_audio_path=args.audio_files, mode='train')
+dataset = SpeechDataGenerator(dataset_audio_path=audio_files, mode='train')
 
-args.num_classes = len(set(dataset.labels))
+num_classes = len(set(dataset.labels))
 train_size = int(0.85 * len(dataset))
 test_size = len(dataset) - train_size
 train_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size, test_size])
@@ -58,15 +52,15 @@ print("All data:" + str(len(dataset)))
 print("Training on " + str(len(train_dataset)))
 print("Validating on " + str(len(test_dataset)))
 
-dataloader_train = DataLoader(train_dataset, batch_size=args.batch_size, collate_fn=speech_collate, pin_memory=False,
+dataloader_train = DataLoader(train_dataset, batch_size=batch_size, collate_fn=speech_collate, pin_memory=False,
                               shuffle=True)
-dataloader_val = DataLoader(test_dataset, batch_size=args.batch_size, collate_fn=speech_collate, pin_memory=False,
+dataloader_val = DataLoader(test_dataset, batch_size=batch_size, collate_fn=speech_collate, pin_memory=False,
                             shuffle=True)
 
-# Model related
-use_cuda = True  # torch.cuda.is_available()
+# Model related settings
+use_cuda = torch.cuda.is_available()
 device = torch.device("cuda" if use_cuda else "cpu")
-model = X_vector(args.input_dim, args.num_classes).to(device)
+model = X_vector(input_dim, num_classes).to(device)
 optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=0.0, betas=(0.9, 0.98), eps=1e-9)
 loss_fun = nn.CrossEntropyLoss()
 
@@ -142,7 +136,7 @@ def validation(dataloader_val, epoch):
 
 
 if __name__ == '__main__':
-    for epoch in range(args.num_epochs):
+    for epoch in range(num_epochs):
         train(dataloader_train, epoch)
         validation(dataloader_val, epoch)
         draw_curve(epoch)

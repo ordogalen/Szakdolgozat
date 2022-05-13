@@ -1,11 +1,6 @@
 import torch.nn as nn
 from models.tdnn import TDNN
 import torch
-"""
-Created on Sat May 30 19:59:45 2020
-@author: krishna
-repo: https://github.com/KrishnaDN/x-vector-pytorch
-"""
 
 
 class X_vector(nn.Module):

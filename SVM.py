@@ -11,7 +11,6 @@ import numpy as np
 from sklearn.metrics import ConfusionMatrixDisplay
 import matplotlib.pyplot as plt
 
-a = set()
 def load_aibo_data(filepath):
     """
     Make training dev and test Bunch
@@ -36,7 +35,6 @@ def load_aibo_data(filepath):
             b = np.concatenate((b, data))
 
         labelName = file.split("#")[1].split(".")[0]
-        a.add(labelName)
         if labelName == "A":
             dev_data["target"] += [0]
         if labelName == "E":
@@ -57,7 +55,7 @@ def load_aibo_data(filepath):
 dev = load_aibo_data('./meta/aibo/dev')
 train = load_aibo_data('./meta/aibo/train_downsample')
 test = load_aibo_data('./meta/aibo/test')
-print(a)
+
 X_dev = dev.data
 y_dev = dev.target
 
@@ -135,18 +133,5 @@ def predict(complexity, kernel, gamma):
 
     plt.show()
 
-# for i in [0.001,0.01,0.1,1.0]:
-
-print("LINEAR kernel")
-predict(0.01, "linear", 'scale')
-print("---------------------------")
-
-# for i in [0.1,1.0,10.0]:
-#     for j in [0.0001,0.001,0.01,0.1,1.0]:
-# print("c = " + str(i)+" g = "+str(j))
-
-print("RBF kernel")
-predict(1.0,"rbf",0.001)
-print("--------------------")
 
 

@@ -11,6 +11,7 @@ PATH = "save_model/best_check_point_55_0.8169845943339169"
 PATH_A = "save_model/best_check_point_32_0.7193116955459118"
 wav_aibo = "./meta/aibo/wav-aibo/"
 
+#Settins for x_Vector
 use_cuda = torch.cuda.is_available()
 device = torch.device("cuda" if use_cuda else "cpu")
 model = X_vector(257, 12).to(device)
