@@ -17,5 +17,4 @@ This project was made for diploma work.
 	- Add your path-s to variable in SVM.py and run it.
 
 #### Reference
-- This project was based on: https://github.com/KrishnaDN/x-vector-pytorch#installation
-- And also on "Spoken Language Recognition using X-vectors" by David Snyder and his partners: https://danielpovey.com/files/2018_odyssey_xvector_lid.pdf
+-  x_vector is based on this paper "Spoken Language Recognition using X-vectors" by David Snyder and his partners: https://danielpovey.com/files/2018_odyssey_xvector_lid.pdf
