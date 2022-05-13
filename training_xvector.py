@@ -5,7 +5,7 @@ from SpeechDataGenerator import SpeechDataGenerator
 import torch.nn as nn
 import os
 from torch import optim
-from models.x_vector_Indian_LID import X_vector
+from models.x_vector import X_vector
 from sklearn.metrics import accuracy_score
 from utils.utils import speech_collate
 import matplotlib.pyplot as plt

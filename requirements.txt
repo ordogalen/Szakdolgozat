@@ -35,3 +35,5 @@ torchaudio==0.9.1
 torchvision==0.10.1
 urllib3==1.26.7
 wincertstore==0.2
+
+matplotlib~=3.4.3

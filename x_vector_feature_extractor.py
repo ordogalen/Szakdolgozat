@@ -2,7 +2,7 @@ import os
 import numpy as np
 
 import torch
-from models.x_vector_Indian_LID import X_vector
+from models.x_vector import X_vector
 from utils import utils
 
 # Paths for check points
